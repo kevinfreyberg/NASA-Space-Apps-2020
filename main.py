@@ -6,6 +6,8 @@ import interval_schedule
 #List of tags
 food_tag = set(["Food"])
 sleep_tag = set(["Sleep"])
+test_tag = set(["Test"])
+max_tags = {"Food":3, "Sleep":1}
 
 
 shifts = []
@@ -54,7 +56,7 @@ for shift in shifts:
     # each sleep block seperatly
     for start in range(0,24, 1):
       sleeptimes.append(b.block(start, start+person.sleep_duration, sleep_value_eq(start), sleep_tag))
-    shift_scores.append(interval_schedule.optimize_schedule(sleeptimes+shift))
+    shift_scores.append(interval_schedule.optimize_schedule(sleeptimes+shift, max_tags))
   i = shift_scores.index(max(shift_scores, key= lambda x: x.value))
   pairs.append([shift_scores[i], people[i]])
   people.pop(i)
