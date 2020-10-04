@@ -16,6 +16,7 @@ class block:
 def overlapping(block1, block2): #returns true if blocks overlap
   if (block2.start<=block1.start<block2.end) or (block2.start<block1.end<=block2.end):
     return True; 
+  elif (block1.start<=block2.start<block1.end) or (block1.start<block2.end<=block1.end):
+    return True;
   else:
-    return False;
-
+    return False
