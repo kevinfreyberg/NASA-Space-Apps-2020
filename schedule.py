@@ -9,7 +9,7 @@ class schedule:
     #You need to update the schedules's value
     #and you need to add it to the list of blocks
     for item in block.tags:
-      if self.tags[item]:
+      if item in self.tags:
         self.tags[item] += 1;
       else:
         self.tags[item] = 1;
@@ -18,13 +18,17 @@ class schedule:
       
   def count_tag(self, key):
     #returns how count of the tag that is passed
-    if tags[key]:
-      return tags[key]
+    if key in self.tags:
+      return self.tags[key]
     else:
       return 0
   
   def __repr__(self):
-    return str(self.lst)
+    string = "["
+    for block in self.lst:
+      string += str(block) + ", "
+    string += "]"
+    return string
 
   def clear(self):
     #resets schedule
@@ -42,6 +46,8 @@ class schedule:
 def tag_conflict(s, b, max_tags):
   #See if adding block b would put you over the max count for a specific tag
   for tag in b.tags:
+    if (tag not in s.tags) or (tag not in max_tags):
+      continue
     if s.tags[tag] + 1 > max_tags[tag]:
       return False
 
