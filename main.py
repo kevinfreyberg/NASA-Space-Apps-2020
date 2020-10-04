@@ -6,7 +6,6 @@ import interval_schedule
 #List of tags
 food_tag = set(["Food"])
 sleep_tag = set(["Sleep"])
-test_tag = set(["Test"])
 max_tags = {"Food":3, "Sleep":1}
 
 
