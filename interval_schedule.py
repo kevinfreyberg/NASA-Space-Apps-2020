@@ -55,7 +55,6 @@ def optimize_schedule(lst, max_tags):
           #If weight array was updated then check to see if its the new max
           if weight_array[i] > weight_array[max_weight_index]:
             max_weight_index = i
-      #input()
 
   solution_array[max_weight_index].lst.sort(key=lambda x: x.start)
   return solution_array[max_weight_index]
