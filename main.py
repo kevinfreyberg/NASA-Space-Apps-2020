@@ -1,6 +1,7 @@
 import person as p
 import block as b
 import interval_schedule
+import time as t
 
 
 #List of tags, weights 1->4 depending on importance
@@ -15,7 +16,7 @@ landing_tag = set(["Landing"]) #weight 4
 undock_tag = set(["Undocking"]) #weight 4
 
 #Food = 1 hour per, Sleep is defined by input, Exercise = 1 hour, Work = 1 hour
-max_tags = {"Food":3, "Sleep":1, "Exercise":1, "Work":12} 
+max_tags = {"Food":3, "Sleep":0, "Exercise":1, "Work":12} 
 
 shifts = []
 people = []
@@ -38,40 +39,46 @@ print("\nHi, {}! When do you normally go to sleep (24H Format, round by hour)?\n
 sleep_start = int(input())
 print("\nWhen do you normally wake up (24H Format, round by hour)?\n")
 sleep_end = int(input())
-print("\nWould you consider yourself a morning-person (a), night-person (b), or in-between (c)?\n")
-choice = str(input())
 
-possible_choices = ["a", "b", "c"]
-while (choice not in possible_choices):
-  print("\nInvalid input!\n")
-  print("\nWould you consider yourself a morning-person (a), night-person (b), or in-between (c)?\n")
-  choice = str(input())
 
 people.append(p.person(name, sleep_start, sleep_end))
-shifts = []
+events = ["a", "b", "c", "d"]
+shift = []
+print("\nWill you be docking/undocking/landing/launching today? Type 'yes' if so: \n")
+if input() == "yes":
+  print("\nPlease type 'a' for docking, 'b' for undocking, 'c' for landing, or 'd' for launching: \n")
+  event_type = str(input())
+  while (event_type not in events):
+    print("\nInvalid input!\n")
+    print("Please type 'a' for docking, 'b' for undocking, 'c' for landing, or 'd' for launching: \n")
+    event_type = str(input())
+  if event_type == "a":
+    event_tag = dock_tag
+  elif event_type == "b":
+    event_tag = undock_tag
+  elif event_type == "c":
+    event_tag = landing_tag
+  else:
+    event_tag = launch_tag 
+  print("\nWhat is the start time of this event (24H Format, round by hour)?\n")
+  special_start = int(input())
+  print("\nWhat is the end time of this event (24H Format, round by hour)?\n")
+  special_end = int(input())
+
+  shift.append(b.block(special_start,special_end,1000,event_tag))
 
 #shift1 is the first job that needs to be filled
 #you add all of the tasks shift one could possibly do to a list
-for person in people:
-  shift = [] #Hours 8-24
-  for time in range(0, 24): #generates time blocks for all activities
-    shift.append(b.block(time,(time+1)%24,10,exercise_tag))
-    shift.append(b.block(time,(time+1)%24,2,work_tag))
-    shift.append(b.block(time, (time+person.sleep_duration)%24, sleep_value_eq(person.sleep_offset(time)), sleep_tag))
-  for time in range(0, 24, 4): #Food is served every 4 hours. Only add a food block every 4 hours
-    shift.append(b.block(time,(time+1)%24,10,food_tag))
-  shifts.append(shift)
 
-#adds shifts based on preferences
-if choice == "a":
-  #shifts.append(shift1)
-  pass
-elif choice == "b":
-  #shifts.append(shift1)
-  pass
-else:
-  #shifts.append(shift1)
-  pass
+for person in people:
+  #shift = [] #Hours 8-24
+  for time in range(0, 24): #generates time blocks for all activities
+    shift.append(b.block(time, (time+person.sleep_duration)%24, sleep_value_eq(person.sleep_offset(time))+20000, sleep_tag))
+    shift.append(b.block(time,(time+1)%24,100,exercise_tag))
+    shift.append(b.block(time,(time+1)%24,60,work_tag))
+  for time in range(0, 24, 4): #Food is served every 4 hours. Only add a food block every 4 hours
+    shift.append(b.block(time,(time+1)%24,100,food_tag))
+  shifts.append(shift)
 
 #See who has the best outcome for shift 1: place them in shift 1
 #See who has the best outcome for shift 2: place them in shift 2
@@ -86,9 +93,21 @@ for shift in shifts:
 
 #printing results
 for pair in pairs:
-  print("Person:", pair[1])
-  print("Schedule:", pair[0])
+  print("Person: ", pair[1])
+  print("Schedule: ", pair[0])
   print()
+  print("--------------------------------------------------------------------------------")
+  print("Key tips for maintaining circadian rhythm and avoiding circadian misalignment!\n")
+  t.sleep(2)
+  print("\n STAY AWAY FROM BLUE LIGHT \n")
+  print("\t Countermeasure: Blue light blocker glasses, \n")
+  t.sleep(2)
+  print("\n MINIMIZE NOISE \n")
+  print("\t Countermeasure: Ear plugs, \n")
+  t.sleep(2)
+  print("\n KEEP ENVIRONMENTAL FACTORS IN CHECK \n")
+  print("\t Countermeasure: Maintain good levels of: temperature, airflow, noise, CO2 \n")
+  print("--------------------------------------------------------------------------------")
 
 
 
