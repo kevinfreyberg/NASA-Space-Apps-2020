@@ -2,7 +2,7 @@ import block as b
 import schedule as s
 
 
-def optimize_schedule(lst):
+def optimize_schedule(lst, max_tags):
   #List is a list of blocks
   
   #Sort list by rising end time
@@ -17,7 +17,7 @@ def optimize_schedule(lst):
   # If you want to limit the ammount a tag can show up ex
   # Eating food has a very high value cause its important, if you dont limit
   # the ammount of meals the algorithm will make astronauts eat all day
-  max_tags = {"Food":3, "Sleep":1}
+  
 
   # copy weights into an array
   # put every block into its own a schedule and then the solution array
@@ -33,7 +33,7 @@ def optimize_schedule(lst):
   # If it does not then you check to see if i's weight_array_value is better than
   # i's original value + j's weight_array_value
   for i in range(0,len(lst)-1):
-    for j in range(1,i): 
+    for j in range(1,i):
       #A tag conflit is when you have to many of one type of event. Ex: 2 Sleep times
       if not s.tag_conflict(solution_array[i], lst[j], max_tags):
         continue
@@ -55,7 +55,6 @@ def optimize_schedule(lst):
           #If weight array was updated then check to see if its the new max
           if weight_array[i] > weight_array[max_weight_index]:
             max_weight_index = i
-      #input()
 
   solution_array[max_weight_index].lst.sort(key=lambda x: x.start)
   return solution_array[max_weight_index]

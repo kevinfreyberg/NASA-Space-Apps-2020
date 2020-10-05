@@ -11,7 +11,7 @@ class person:
   def sleep_offset(self, start_sleep_time):
     #Returns how much of an offset would be caused
     #if sleep started at start_sleep_time
-    return self.sleep_block.start - start_sleep_time
+    return min((self.sleep_block.start - start_sleep_time, start_sleep_time - self.sleep_block.start))
 
   def __repr__(self):
     return self.name + str(self.sleep_block)
